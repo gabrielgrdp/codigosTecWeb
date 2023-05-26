@@ -33,9 +33,13 @@ class _RandomNumberPageState extends State<RandomNumberPage> {
 
     for (int i = 0; i < count; i++) {
       int randomNumber = _random.nextInt(end - start + 1) + start;
-      numbers.add(randomNumber);
-    }
+      while (numbers.contains(randomNumber)) {
+  randomNumber = _random.nextInt(end - start + 1) + start;
+}
+numbers.add(randomNumber);
 
+    }
+    numbers.sort();
     return numbers;
   }
 
@@ -59,7 +63,8 @@ class _RandomNumberPageState extends State<RandomNumberPage> {
       );
     } else {
       final List<int> randomNumbers = _generateRandomNumbers(start, end, 3);
-      final String numbersText = randomNumbers.join(', ');
+      final List<int> sortedNumbers = List.from(randomNumbers)..sort();
+      final String numbersText = sortedNumbers.join(', ');
 
       showDialog(
         context: context,
