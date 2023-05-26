@@ -47,7 +47,7 @@ class RandomNumberPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sorteio de Números'),
+        title: Text('Sorteador de Números Inteiros'),
       ),
       body: Center(
         child: ElevatedButton(
