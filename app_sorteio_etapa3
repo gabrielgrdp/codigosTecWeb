@@ -57,7 +57,7 @@ class _RandomNumberPageState extends State<RandomNumberPage> {
         builder: (_) => AlertDialog(
           title: Text('Mensagem!'),
           content: Text(
-              'No intervalo de $start a $end o número sorteado foi $randomNumber.'),
+              'No intervalo de $start a $end, o número sorteado foi $randomNumber.'),
           actions: <Widget>[
             TextButton(
               child: Text('OK'),
