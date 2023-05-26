@@ -1,0 +1,116 @@
+import 'dart:math';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(RandomNumberApp());
+}
+
+class RandomNumberApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Sorteio de Números',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: RandomNumberPage(),
+    );
+  }
+}
+
+class RandomNumberPage extends StatefulWidget {
+  @override
+  _RandomNumberPageState createState() => _RandomNumberPageState();
+}
+
+class _RandomNumberPageState extends State<RandomNumberPage> {
+  final Random _random = Random();
+  TextEditingController _startController = TextEditingController();
+  TextEditingController _endController = TextEditingController();
+
+  int _generateRandomNumber(int start, int end) {
+    return _random.nextInt(end - start + 1) + start;
+  }
+
+  void _showRandomNumber(BuildContext context) {
+    final int start = int.tryParse(_startController.text) ?? 0;
+    final int end = int.tryParse(_endController.text) ?? 0;
+
+    if (start >= end) {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Erro'),
+          content: Text('O valor inicial deve ser menor que o valor final.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    } else {
+      final randomNumber = _generateRandomNumber(start, end);
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Mensagem!'),
+          content: Text(
+              'No intervalo de $start a $end o número sorteado foi $randomNumber.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _startController.dispose();
+    _endController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sorteador de Números Inteiros'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextFormField(
+              controller: _startController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Valor Inicial'),
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              controller: _endController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Valor Final'),
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () => _showRandomNumber(context),
+              child: Text(
+                'Sortear',
+                style: TextStyle(fontSize: 18),
+              ),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(150, 50),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
