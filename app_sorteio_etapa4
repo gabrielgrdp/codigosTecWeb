@@ -61,7 +61,7 @@ numbers.add(randomNumber);
           ],
         ),
       );
-    } else if (end - start < 2) {
+    } else if (end - start + 1 < 3) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
