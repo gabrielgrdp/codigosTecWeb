@@ -2,40 +2,40 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(RandomNumberApp());
+  runApp(AppSorteioNumeros());
 }
 
-class RandomNumberApp extends StatelessWidget {
+class AppSorteioNumeros extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contexto) {
     return MaterialApp(
       title: 'Sorteio de Números',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RandomNumberPage(),
+      home: PaginaSorteioNumeros(),
     );
   }
 }
 
-class RandomNumberPage extends StatelessWidget {
+class PaginaSorteioNumeros extends StatelessWidget {
   final Random _random = Random();
 
-  int _generateRandomNumber() {
+  int _gerarNumeroAleatorio() {
     return _random.nextInt(10) + 1;
   }
 
-  void _showRandomNumber(BuildContext context) {
-    final randomNumber = _generateRandomNumber();
+  void _mostrarNumeroAleatorio(BuildContext contexto) {
+    final numeroAleatorio = _gerarNumeroAleatorio();
     showDialog(
-      context: context,
+      context: contexto,
       builder: (_) => AlertDialog(
         title: Text('Mensagem!'),
-        content: Text('Foi sorteado o número $randomNumber.'),
+        content: Text('Foi sorteado o número $numeroAleatorio.'),
         actions: <Widget>[
           TextButton(
             child: Text('OK'),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(contexto).pop(),
           ),
         ],
       ),
@@ -43,14 +43,14 @@ class RandomNumberPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contexto) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sorteador de Números Inteiros de 1 a 10'),
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => _showRandomNumber(context),
+          onPressed: () => _mostrarNumeroAleatorio(contexto),
           child: Text(
             'Sortear',
             style: TextStyle(fontSize: 18),
