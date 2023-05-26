@@ -2,94 +2,96 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(RandomNumberApp());
+  runApp(AppSorteioNumeros());
 }
 
-class RandomNumberApp extends StatelessWidget {
+class AppSorteioNumeros extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contexto) {
     return MaterialApp(
       title: 'Sorteio de Números',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RandomNumberPage(),
+      home: PaginaSorteioNumeros(),
     );
   }
 }
 
-class RandomNumberPage extends StatefulWidget {
+class PaginaSorteioNumeros extends StatefulWidget {
   @override
-  _RandomNumberPageState createState() => _RandomNumberPageState();
+  _PaginaSorteioNumerosState createState() => _PaginaSorteioNumerosState();
 }
 
-class _RandomNumberPageState extends State<RandomNumberPage> {
+class _PaginaSorteioNumerosState extends State<PaginaSorteioNumeros> {
   final Random _random = Random();
-  TextEditingController _startController = TextEditingController();
-  TextEditingController _endController = TextEditingController();
+  TextEditingController _inicioController = TextEditingController();
+  TextEditingController _fimController = TextEditingController();
 
-  List<int> _generateRandomNumbers(int start, int end, int count) {
-    List<int> numbers = [];
+  List<int> _gerarNumerosAleatorios(int inicio, int fim, int quantidade) {
+    List<int> numeros = [];
 
-    for (int i = 0; i < count; i++) {
-      int randomNumber = _random.nextInt(end - start + 1) + start;
-      while (numbers.contains(randomNumber)) {
-  randomNumber = _random.nextInt(end - start + 1) + start;
-}
-numbers.add(randomNumber);
-
+    for (int i = 0; i < quantidade; i++) {
+      int numeroAleatorio = _random.nextInt(fim - inicio + 1) + inicio;
+      while (numeros.contains(numeroAleatorio)) {
+        numeroAleatorio = _random.nextInt(fim - inicio + 1) + inicio;
+      }
+      numeros.add(numeroAleatorio);
     }
-    numbers.sort();
-    return numbers;
+
+    numeros.sort();
+    return numeros;
   }
 
-  void _showRandomNumbers(BuildContext context) {
-    final int start = int.tryParse(_startController.text) ?? 0;
-    final int end = int.tryParse(_endController.text) ?? 0;
+  void _mostrarNumerosAleatorios(BuildContext contexto) {
+    final int inicio = int.tryParse(_inicioController.text) ?? 0;
+    final int fim = int.tryParse(_fimController.text) ?? 0;
 
-    if (start >= end) {
+    if (inicio >= fim) {
       showDialog(
-        context: context,
+        context: contexto,
         builder: (_) => AlertDialog(
           title: Text('Erro'),
           content: Text('O valor inicial deve ser menor que o valor final.'),
           actions: <Widget>[
             TextButton(
               child: Text('OK'),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(contexto).pop(),
             ),
           ],
         ),
       );
-    } else if (end - start + 1 < 3) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Erro'),
-        content: Text('O intervalo entre os valores é insuficiente para o sorteio de 3 números.'),
-        actions: <Widget>[
-          TextButton(
-            child: Text('OK'),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-      ),
-    );
-    } else {
-      final List<int> randomNumbers = _generateRandomNumbers(start, end, 3);
-      final List<int> sortedNumbers = List.from(randomNumbers)..sort();
-      final String numbersText = sortedNumbers.join(', ');
-
+    } else if (fim - inicio + 1 < 3) {
       showDialog(
-        context: context,
+        context: contexto,
         builder: (_) => AlertDialog(
-          title: Text('Mensagem!'),
+          title: Text('Erro'),
           content: Text(
-              'No intervalo de $start a $end, os 3 números sorteados foram: $numbersText.'),
+              'O intervalo entre os valores é insuficiente para o sorteio de 3 números.'),
           actions: <Widget>[
             TextButton(
               child: Text('OK'),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(contexto).pop(),
+            ),
+          ],
+        ),
+      );
+    } else {
+      final List<int> numerosAleatorios =
+          _gerarNumerosAleatorios(inicio, fim, 3);
+      final List<int> numerosOrdenados = List.from(numerosAleatorios)..sort();
+      final String textoNumeros = numerosOrdenados.join(', ');
+
+      showDialog(
+        context: contexto,
+        builder: (_) => AlertDialog(
+          title: Text('Mensagem!'),
+          content: Text(
+              'No intervalo de $inicio a $fim, os 3 números sorteados foram: $textoNumeros.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () => Navigator.of(contexto).pop(),
             ),
           ],
         ),
@@ -99,36 +101,36 @@ numbers.add(randomNumber);
 
   @override
   void dispose() {
-    _startController.dispose();
-    _endController.dispose();
+    _inicioController.dispose();
+    _fimController.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contexto) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sorteador de 3 Números Inteiros'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextFormField(
-              controller: _startController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Valor Inicial'),
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                  controller: _inicioController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Valor Inicial'),
             ),
             SizedBox(height: 16.0),
             TextFormField(
-              controller: _endController,
+              controller: _fimController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(labelText: 'Valor Final'),
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () => _showRandomNumbers(context),
+              onPressed: () => _mostrarNumerosAleatorios(contexto),
               child: Text(
                 'Sortear',
                 style: TextStyle(fontSize: 18),
@@ -143,3 +145,4 @@ numbers.add(randomNumber);
     );
   }
 }
+ 
