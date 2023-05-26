@@ -61,6 +61,20 @@ numbers.add(randomNumber);
           ],
         ),
       );
+    } else if (end - start < 2) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Erro'),
+        content: Text('O intervalo entre os valores é insuficiente para sortear 3 números.'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+    );
     } else {
       final List<int> randomNumbers = _generateRandomNumbers(start, end, 3);
       final List<int> sortedNumbers = List.from(randomNumbers)..sort();
@@ -94,7 +108,7 @@ numbers.add(randomNumber);
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sorteador de Números Inteiros'),
+        title: Text('Sorteador de 3 Números Inteiros'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
