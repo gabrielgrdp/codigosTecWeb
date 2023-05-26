@@ -77,6 +77,20 @@ class _RandomNumberPageState extends State<RandomNumberPage> {
           ],
         ),
       );
+    } else if (end - start + 1 < quantity) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Erro'),
+        content: Text('O intervalo entre os valores é insuficiente para o sorteio solicitado.'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('OK'),
+            onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
     } else {
       final List<int> randomNumbers =
           _generateRandomNumbers(start, end, quantity);
